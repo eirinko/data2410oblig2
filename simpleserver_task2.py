@@ -15,17 +15,13 @@ while True:
         print("Ready to serve...")
         connectionSocket, addr = serverSocket.accept()
         
+        #Receiving message from the client
         message = connectionSocket.recv(1024).decode()
-        print(message)
-
-        #Task 2:
         filename = message.split('\r\n')[2]
-        print(filename)
-        
         f = open(filename[1:])
         outputdata = f.read()
 
-        #Send one HTTP header line into socket
+        #Send one HTTP header into socket
         encoding = 'ascii'
         connectionSocket.send(bytes('HTTP/1.0 200 OK\r\n', encoding))
         connectionSocket.send(bytes('Content-Type: text/html\r\n\r\n', encoding))
@@ -34,6 +30,8 @@ while True:
         for i in range(0, len(outputdata)):
             connectionSocket.send(outputdata[i].encode()) 
         connectionSocket.send("\r\n".encode())
+        
+        #Close client socket
         connectionSocket.close()
 
     except IOError:

@@ -2,6 +2,7 @@ from socket import *
 import sys
 import argparse
 
+#Used a modified part of the argparse code from oblig 1:
 parser = argparse.ArgumentParser(description='simple args')
 
 #Adding arguments to the parser:
@@ -32,8 +33,11 @@ try:
     #connect to the server
     clientSocket.connect((args.ip, args.port)) #IP and port in tuple.
     
+    #Creating a HTTP header
     encoding = "ascii"
     request_header = f"GET / HTTP/1.0\r\nHost: {args.ip}:/{args.port}\r\n{args.filename}\r\n\r\n"
+    
+    #Sending the GET request to the server
     clientSocket.send(bytes(request_header,encoding))
     
     result = ""
@@ -43,6 +47,8 @@ try:
         if not received_line:
             break
         result += received_line
+    
+    #The result is printed to the terminal to easily check it.
     print(result)
     clientSocket.close()
     
