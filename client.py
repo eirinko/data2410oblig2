@@ -2,31 +2,48 @@ from socket import *
 import sys
 import argparse
 
+parser = argparse.ArgumentParser(description='simple args')
+
+#Adding arguments to the parser:
+parser.add_argument('-f' , '--filename', type=str, default="/index.html")
+parser.add_argument('-p', '--port', type=int, default=8000) 
+parser.add_argument('-i', '--ip', type=str, default="127.0.0.1")
+
+args = parser.parse_args()
+
+#Setting up to test if the IP address is in the correct format
+test_ip = args.ip.split(".")
+notinrange = False
+for number in test_ip:
+    if int(number) not in range (0,256): # Assuming we want inclusive 0 and inclusive 255. 
+        notinrange = True
+
+#First check for the range of the port, assuming we want inclusive 1024 and inclusive 65535.
+if args.port not in range(1024,65536):
+    print("Invalid port. It must be within the range [1024,65535]")
+#Then check for the format of the IP address. 
+#If it doesn't contain 4 numbers or the numbers are out of range you get a error message.
+elif len(test_ip)!=4 or notinrange:
+    print("Invalid IP. It must in this format: 10.1.2.3")
 
 try:
     clientSocket = socket(AF_INET,SOCK_STREAM)
     
-    port = 8000
-    server_ip = '127.0.0.1'
-    
     #connect to the server
-    clientSocket.connect((server_ip, port)) #IP and port in tuple.
+    clientSocket.connect((args.ip, args.port)) #IP and port in tuple.
     
-    inp=""
-    while (inp.lower() != "exit"):
-        inp = input("Connected to the server. Enter the file name: ")
-        print('Your input: ',inp)
-        
-        #Send data:
-        clientSocket.send(inp.encode())
-        
+    encoding = "ascii"
+    request_header = f"GET / HTTP/1.0\r\nHost: {args.ip}:/{args.port}\r\n{args.filename}\r\n\r\n"
+    clientSocket.send(bytes(request_header,encoding))
+    
+    result = ""
+    while True:
         #Read data from the socket
-        #What happens when there are several lines????
         received_line = clientSocket.recv(1024).decode()
-        
-        #prints
-        print(received_line)
-    
+        if not received_line:
+            break
+        result += received_line
+    print(result)
     clientSocket.close()
     
 except error as e:
