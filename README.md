@@ -13,3 +13,6 @@ For adding the arguments in the terminal some of the code from oblig 1 was used 
 For the rest of the code: the client connects to the IP and port given and sends an HTTP GET request to the server. All the information it gets from the server is added to a result that is printed before closing the socket. 
 
 ## Task 3: Making a multi-threaded web server
+Running the multi-threaded server and then running two clients will yield this result:
+![image](https://github.com/eirinko/data2410oblig2/assets/31256905/e4d67f96-d2c8-41d8-8151-b6616f438630)
+The first client is connected to port 47586 and the second is connected to 47594.
