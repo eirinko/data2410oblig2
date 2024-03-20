@@ -49,7 +49,7 @@ try:
         result += received_line
     
     #The result is printed to the terminal to easily check it.
-    print(result)
+    print(result) #But the code never reach this point because the connection is not broken.
     clientSocket.close()
     
 except error as e:
