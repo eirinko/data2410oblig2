@@ -3,6 +3,7 @@ import sys
 import argparse
 
 #Used a modified part of the argparse code from oblig 1:
+#Initializing the parser:
 parser = argparse.ArgumentParser(description='simple args')
 
 #Adding arguments to the parser:
@@ -28,17 +29,17 @@ elif len(test_ip)!=4 or notinrange:
     print("Invalid IP. It must in this format: 10.1.2.3")
 
 try:
+    #Creating a socket with TCP and a two-way byte stream
     clientSocket = socket(AF_INET,SOCK_STREAM)
     
-    #connect to the server
-    clientSocket.connect((args.ip, args.port)) #IP and port in tuple.
+    #connect to the server and the given IP and Port
+    clientSocket.connect((args.ip, args.port))
     
-    #Creating a HTTP header
-    encoding = "ascii"
+    #Creating a HTTP GET method
     request_header = f"GET / HTTP/1.0\r\nHost: {args.ip}:/{args.port}\r\n{args.filename}\r\n\r\n"
     
     #Sending the GET request to the server
-    clientSocket.send(bytes(request_header,encoding))
+    clientSocket.send(bytes(request_header,"ascii"))
     
     result = ""
     while True:
@@ -49,7 +50,8 @@ try:
         result += received_line
     
     #The result is printed to the terminal to easily check it.
-    print(result) #But the code never reach this point because the connection is not broken.
+    print(result)
+    #Closing the client socket and the connection
     clientSocket.close()
     
 except error as e:

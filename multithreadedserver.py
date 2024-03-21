@@ -3,29 +3,32 @@ from socket import *
 import sys # In order to terminate the program
 import _thread as thread
 
+#Function for handling each client thread:
 def handleClient(connection):
     #Receiving message from the client
     message = connection.recv(1024).decode()
-    print(message)
+    
+    #The file name is the info on index 2.
     filename = message.split('\r\n')[2]
+    
+    #Opening the file (in this case: index.html) and reading it to output data
     f = open(filename[1:])
     outputdata = f.read()
 
-    #Send one HTTP header into socket
-    encoding = 'ascii'
-    connection.send(bytes('HTTP/1.0 200 OK\r\n', encoding))
-    connection.send(bytes('Content-Type: text/html\r\n\r\n', encoding))
+    #Send an HTTP header into the socket
+    connection.send(bytes('HTTP/1.0 200 OK\r\n', 'ascii'))
+    connection.send(bytes('Content-Type: text/html\r\n\r\n', 'ascii'))
 
     #Send the content of the requested file to the client
     for i in range(0, len(outputdata)):
         connection.send(outputdata[i].encode()) 
-    connection.send("\r\n".encode())
     #Close client socket
     connection.close()
 
+#Creating a socket with TCP and a two-way byte stream
 serverSocket = socket(AF_INET, SOCK_STREAM) 
 
-#Prepare a server socket
+#Prepare a info for server socket to listen for clients
 server_port = 8000
 server_ip = '127.0.0.1'
 serverSocket.bind((server_ip, server_port))
@@ -44,11 +47,10 @@ while True:
 
     except IOError:
         #Send response message for file not found
-        encoding = 'ascii'
-        connectionSocket.send(bytes('HTTP/1.0 404 Not Found\r\n', encoding))
+        connectionSocket.send(bytes('HTTP/1.0 404 Not Found\r\n', 'ascii'))
         
         #Close client socket
         connectionSocket.close()
         
-serverSocket.close()
+serverSocket.close() #The server runs indefinitely, until killed in the terminal
 sys.exit()#Terminate the program after sending the corresponding data
