@@ -17,7 +17,11 @@ while True:
         
         #Receiving message from the client
         message = connectionSocket.recv(1024).decode()
+        
+        #File to be opened
         filename = message.split('\r\n')[2]
+        
+        #Opening the file and reading it to outputdata
         f = open(filename[1:])
         outputdata = f.read()
 

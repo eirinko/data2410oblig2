@@ -28,7 +28,7 @@ def handleClient(connection):
 #Creating a socket with TCP and a two-way byte stream
 serverSocket = socket(AF_INET, SOCK_STREAM) 
 
-#Prepare a info for server socket to listen for clients
+#Prepare a server socket that will listen for clients
 server_port = 8000
 server_ip = '127.0.0.1'
 serverSocket.bind((server_ip, server_port))

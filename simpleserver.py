@@ -15,8 +15,13 @@ while True:
         print("Ready to serve...")
         connectionSocket, addr = serverSocket.accept()
         
+        #Receiving message from client
         message = connectionSocket.recv(1024).decode()
+        
+        #File to be opened
         filename = message.split()[1]
+        
+        #Opening the file and reading it to outputdata
         f = open(filename[1:])
         outputdata = f.read()
 
@@ -29,6 +34,7 @@ while True:
         for i in range(0, len(outputdata)):
             connectionSocket.send(outputdata[i].encode()) 
         connectionSocket.send("\r\n".encode())
+        #Close client socket
         connectionSocket.close()
 
     except IOError:
