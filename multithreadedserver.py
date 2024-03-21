@@ -4,25 +4,22 @@ import sys # In order to terminate the program
 import _thread as thread
 
 def handleClient(connection):
-    while True:
-        #Receiving message from the client
-        message = connection.recv(1024).decode()
-        print(message)
-        filename = message.split('\r\n')[2]
-        print(filename)
-        f = open(filename[1:])
-        outputdata = f.read()
+    #Receiving message from the client
+    message = connection.recv(1024).decode()
+    print(message)
+    filename = message.split('\r\n')[2]
+    f = open(filename[1:])
+    outputdata = f.read()
 
-        #Send one HTTP header into socket
-        encoding = 'ascii'
-        connection.send(bytes('HTTP/1.0 200 OK\r\n', encoding))
-        connection.send(bytes('Content-Type: text/html\r\n\r\n', encoding))
+    #Send one HTTP header into socket
+    encoding = 'ascii'
+    connection.send(bytes('HTTP/1.0 200 OK\r\n', encoding))
+    connection.send(bytes('Content-Type: text/html\r\n\r\n', encoding))
 
-        #Send the content of the requested file to the client
-        for i in range(0, len(outputdata)):
-            connection.send(outputdata[i].encode()) 
-        connection.send("\r\n".encode())
-        
+    #Send the content of the requested file to the client
+    for i in range(0, len(outputdata)):
+        connection.send(outputdata[i].encode()) 
+    connection.send("\r\n".encode())
     #Close client socket
     connection.close()
 
