@@ -15,4 +15,5 @@ For the rest of the code: the client connects to the IP and port given and sends
 ## Task 3: Making a multi-threaded web server
 Running the multi-threaded server and then running two clients will yield this result:
 ![image](https://github.com/eirinko/data2410oblig2/assets/31256905/e4d67f96-d2c8-41d8-8151-b6616f438630)
+
 The first client is connected to port 47586 and the second is connected to 47594.
